@@ -5,12 +5,11 @@
 }
 
 body {
-    background-color: black;
+    padding: 20px;
 }
-.btn {
-    font: 14px monospace;
-    margin: 100px;
-    padding: 10px;
-    box-shadow: 0px 0px 20px white;
-    border-radius: 20px;
+
+#issMap {
+    height: 400px;
+    width: 600px;
 }
+

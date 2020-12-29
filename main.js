@@ -1,3 +1,43 @@
+
+//Create Map
+const mymap = L.map('issMap').setView([0,0], 3);
+const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tiles = L.tileLayer(tileUrl, { attribution });
+const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
+tiles.addTo(mymap);
+
+//Create Icon
+const issIcon = L.icon({
+    iconUrl: 'iss.png',
+    iconSize: [50, 32],
+    iconAnchor: [25, 16],
+});
+let marker = L.marker([0,0],{icon: issIcon}).addTo(mymap);
+
+//Communicate with the API
+let firstTime = false;
+async function getISS() {
+const response = await fetch(api_url);
+const data = await response.json();
+const { latitude, longitude, altitude } = data;
+const aspect = 1.5625;
+const w = (altitude * aspect) / 10;
+const h = altitude / 10;
+issIcon.options.iconSize = [w,h];
+issIcon.options.iconAnchor = [w/2,h/2]
+mymap.setView([latitude,longitude],mymap.getZoom());
+marker.setLatLng([latitude,longitude]);
+document.getElementById('lat').textContent = latitude;
+document.getElementById('lon').textContent = longitude;
+document.getElementById('alt').textContent = altitude.toFixed(2);
+};
+getISS();
+setInterval(function(){getISS()},3000);
+
+
+
+//For Charting
 async function getData1() {
     const xs1 = [];
     const ys1 = [];
